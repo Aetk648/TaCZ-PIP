@@ -1,0 +1,23 @@
+{
+    "required": true,
+    "package": "com.i50208.taczpip.mixin",
+    "compatibilityLevel": "JAVA_21",
+    "mixins": [],
+    "client": [
+        "GameRendererAccessor",
+        "RenderTypeAccessor",
+        "CompositeStateAccessor",
+        "TextureStateAccessor",
+        "LightTextureAccessor",
+        "LevelRendererAccessor",
+        "MinecraftAccessor",
+        "ScopeLensBedrockAttachmentModelMixin",
+        "ScopeLensCameraSetupEventMixin",
+        "ScopeLensEntityCounterMixin",
+        "ScopeLensGameRendererMixin",
+        "ScopeLensLevelRendererMixin"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    }
+}

@@ -1,0 +1,33 @@
+plugins {
+    id 'java-library'
+    id 'net.neoforged.moddev' version '2.0.143'
+}
+version = mod_version
+group = mod_group_id
+base { archivesName = 'TaCZ PIP' }
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+neoForge {
+    version = project.neo_version
+    runs { client { client() }; server { server(); programArgument '--nogui' } }
+    mods { "${mod_id}" { sourceSet(sourceSets.main) } }
+}
+repositories {
+    mavenCentral()
+}
+// TaCZ 本体：仅编译期依赖（运行期由玩家自行安装的 TaCZ 提供）。
+// libs/ 里随仓库分发的是从 TaCZ 发行 jar 中只提取 .class 的 compile-only 子集（约 1.5MB，
+// 去掉了音效/贴图等运行期资源），clone 后无需任何下载即可编译。
+// 原版发行 jar 来自 https://modrinth.com/mod/tacz-1.21.1 （GitHub: MUKSC/TACZ-1.21.1，
+// neoforge/1.21.1, 1.1.8-hotfix-r7）。如需换版本重新生成：解压原 jar、只保留 *.class 再打包。
+dependencies {
+    compileOnly files('libs/tacz-1.21.1-1.1.8-hotfix-r7-compile-only.jar')
+}
+tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8' }
+processResources {
+    def props = [minecraft_version: minecraft_version, minecraft_version_range: minecraft_version_range,
+                 neo_version: neo_version, loader_version_range: loader_version_range,
+                 mod_id: mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version]
+    inputs.properties props
+    filteringCharset = 'UTF-8'
+    filesMatching('META-INF/neoforge.mods.toml') { expand props }
+}
